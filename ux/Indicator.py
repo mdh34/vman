@@ -43,19 +43,19 @@ class Indicator():
 		menu.show_all()
 		return menu
 
-	def open_location(self):
+	def open_location(self,s):
 		print "open_location"
 
-	def halt(self):
+	def halt(self,s):
 		print "halt"
 
-	def up_suspend(self):
+	def up_suspend(self,s):
 		print "up_suspend"
 
-	def ssh(self):
+	def ssh(self,s):
 		print "ssh"
 
-	def quit(self):
+	def quit(self,s):
 		gtk.main_quit()
 
-ind = Indicator()##kinda works... amanha vejo isto
+#ind = Indicator()##kinda works... amanha vejo isto
