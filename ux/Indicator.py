@@ -9,7 +9,7 @@ from gi.repository import AppIndicator3 as appindicator
 class Indicator():
 	ID = 'Indicator-Vman'
 	def __init__(self):
-		indicator = appindicator.Indicator.new(self.ID, os.path.abspath('../sample_icon.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
+		indicator = appindicator.Indicator.new(self.ID, os.path.abspath('sample_icon.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
 		indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
 		indicator.set_menu(self.build_menu())
 		gtk.main()
