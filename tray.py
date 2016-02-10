@@ -6,10 +6,10 @@ from gi.repository import AppIndicator3 as appindicator
 APPINDICATOR_ID = 'myappindicator'
 
 def main():
-    #indicator = appindicator.Indicator.new(APPINDICATOR_ID, os.path.abspath('sample_icon.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
-    #indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
-    #indicator.set_menu(build_menu())
-    set_idicator(APPINDICATOR_ID)
+    indicator = appindicator.Indicator.new(APPINDICATOR_ID, os.path.abspath('sample_icon.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
+    indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
+    indicator.set_menu(build_menu())
+    #set_idicator(APPINDICATOR_ID)
     
     gtk.main()
 
