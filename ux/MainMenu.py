@@ -12,7 +12,7 @@ class MainMenu():
 		indicator = appindicator.Indicator.new(self.ID, os.path.abspath('sample_icon1.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
 		indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
 		indicator.set_menu(self.build_menu())
-		gtk.main()
+		#gtk.main()
 
 	def build_menu(self):
 		menu = gtk.Menu()

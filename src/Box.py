@@ -1,10 +1,11 @@
 #!/usr/bin/python
+from subprocess import call
 
 class Box():
 
 	box_id 		= ''
 	name		= ''
-	provider 	= ''  
+	provider 	= ''
 	state    	= ''
 	directory 	= ''
 
@@ -49,32 +50,37 @@ class Box():
 	## Functionality
 	def openDirectory(self):
 		dir = self.getDirectory()
-		print "cd " + dir
+		print "calling: cd " + dir
+		#get default file manager
+		#call file manafer on dir locations
+		call(["xdg-open", "dir"])
 
 	def halt(self):
 		print "vagrant halt " + self.getId()
+		call(["vagrant", "halt", self.getId()])
 
 	def upOrSuspend(self):
 		dir = self.getDirectory()
 
 		print "changing directory..."
-
 		cmd = "cd " + dir + " && "
 		status = self.getState()
 
 		if (status == 'running'):
 			print "status on, suspending"
-			cmd += "vagrant suspend"
+			cmd = "suspend"
 
 		else:
 			print "status off or suspended, turning on"
-			cmd += "vagrant up"
+			cmd = "up"
 
-		print cmd
+		print "calling: cd " + dir + " && vagrant " + cmd
+		call(["cd", dir, "&&", "vagrant", cmd])
 		#run cmd
 
 	def ssh(self):
-		print "vagrant ssh " + self.getId()
+		print "calling: vagrant ssh " + self.getId() + "..."
+		call(["vagrant", "ssh", self.getId()])
 
 #manual tests :P
 #
