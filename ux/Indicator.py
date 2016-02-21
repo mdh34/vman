@@ -7,12 +7,15 @@ from gi.repository import Gtk as gtk
 from gi.repository import AppIndicator3 as appindicator
 
 class Indicator():
-	ID = 'Indicator-Vman'
-	def __init__(self):
+	ID = ''
+	def __init__(self, BoxObject):
+		print vars(BoxObject)
+		print BoxObject.getName()
+		self.ID = BoxObject.getName()
 		indicator = appindicator.Indicator.new(self.ID, os.path.abspath('sample_icon.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
 		indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
 		indicator.set_menu(self.build_menu())
-		gtk.main()
+		#gtk.main()
 
 	def build_menu(self):
 		menu = gtk.Menu()
@@ -57,5 +60,11 @@ class Indicator():
 
 	def quit(self,s):
 		gtk.main_quit()
+
+	#def live(self):
+		#gtk.main()
+		#if __name__ == "__main__":
+		#    signal.signal(signal.SIGINT, signal.SIG_DFL)
+		#    main()
 
 #ind = Indicator()##kinda works... amanha vejo isto

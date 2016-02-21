@@ -17,7 +17,7 @@ class Vman():
 		#self.arg = arg
 
 		ind = MainMenu()
-		Gtk.main()
+		#Gtk.main()
 
 		#get home folder
 		home = os.path.expanduser("~")
@@ -34,17 +34,35 @@ class Vman():
 					{'BoxName':"Box2",'Provider':"VirtualBox",'ID':2,'State':"on",'Directory':"/home/glink/Projects/test2"}
 				]
 
-			for x in boxlist:
-				print x['ID']
-				print x['Provider']
-				print x['BoxName']
-				print x['State']
-				print x['Directory']
-				print "-----------||-----------"
+			objs = [Box() for i in boxlist]
+
+			y = 0
+			for x in objs:
+				print 'hey ' + str(y)
+
+				#print x['Provider']
+				#print x['BoxName']
+				#print x['State']
+				#print x['Directory']
+				#print "-----------||-----------"
 
 				print "Creating box object"
+				#vBoxMenu = Box()
+				x.setId(boxlist[y]['ID'])
+				x.setName(boxlist[y]['BoxName'])
+				x.setProvider(boxlist[y]['Provider'])
+				x.setState(boxlist[y]['State'])
+				x.setDirectory(boxlist[y]['Directory'])
+				#print vars(x)
+				#indy = Indicator(x)
+
+				y +=1
 
 				pass
+			indys = [Indicator(i) for i in objs]
+			#for x in indys:
+			#	x.live()
+			#	pass
 
 		else:
 			print "Does not need Config"
@@ -72,7 +90,7 @@ class Vman():
 		#readBoxes()
 
 app=Vman()
-
+#Gtk.main()
 
 
 #ind = MainMenu()
