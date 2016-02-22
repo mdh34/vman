@@ -9,6 +9,7 @@ from gi.repository import Gtk, Gio
 from ux.Indicator import Indicator
 from ux.MainMenu import MainMenu
 from src.Box import Box
+from subprocess import call
 
 class Vman():
 	"""docstring for Vman"""
@@ -63,6 +64,10 @@ class Vman():
 			#for x in indys:
 			#	x.live()
 			#	pass
+
+			for  x in boxlist:
+				os.system("python tray.py &")
+				pass
 
 		else:
 			print "Does not need Config"

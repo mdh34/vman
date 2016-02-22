@@ -1,5 +1,6 @@
 import os
 import signal
+from subprocess import call
 from gi.repository import Gtk as gtk
 from gi.repository import AppIndicator3 as appindicator
 
@@ -10,7 +11,7 @@ def main():
     indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
     indicator.set_menu(build_menu())
     #set_idicator(APPINDICATOR_ID)
-    
+
     gtk.main()
 
 def set_idicator(APPINDICATOR_ID):
@@ -48,6 +49,7 @@ def build_menu():
     return menu
 
 def open_location(self):
+    call(["pwd"])
     print "open_location"
 
 def halt(self):
