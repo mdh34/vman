@@ -1,13 +1,12 @@
 #!/usr/bin/python
 
-import os
-import signal
+import os, inspect, signal, sys
 from gi.repository import Gtk, Gio
 #import os.path
 
 #from ux.Window import Window
-from ux.Indicator import Indicator
-from ux.MainMenu import MainMenu
+#from ux.Indicator import Indicator
+#from ux.MainMenu import MainMenu
 from src.Box import Box
 from subprocess import call
 
@@ -17,8 +16,10 @@ class Vman():
 		#super(Vman, self).__init__()
 		#self.arg = arg
 
-		ind = MainMenu()
-		#Gtk.main()
+		pwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))) + "/ux/"
+		command = "python " + pwd + "MainMenu.py &"
+		print command
+		os.system(command)
 
 		#get home folder
 		home = os.path.expanduser("~")
@@ -29,7 +30,7 @@ class Vman():
 			print "Needs Configs!"
 
 			#test Data
-			#boxlist = ['asd','qwe']
+			#boxlist = ['asd','qwe']   -->database retriven stuff??
 			boxlist = [
 					{'BoxName':"Box1",'Provider':"VirtualBox",'ID':1,'State':"on",'Directory':"/home/glink/Projects/test1"},
 					{'BoxName':"Box2",'Provider':"VirtualBox",'ID':2,'State':"on",'Directory':"/home/glink/Projects/test2"}
@@ -39,34 +40,22 @@ class Vman():
 
 			y = 0
 			for x in objs:
-				print 'hey ' + str(y)
-
-				#print x['Provider']
-				#print x['BoxName']
-				#print x['State']
-				#print x['Directory']
-				#print "-----------||-----------"
 
 				print "Creating box object"
-				#vBoxMenu = Box()
-				x.setId(boxlist[y]['ID'])
-				x.setName(boxlist[y]['BoxName'])
-				x.setProvider(boxlist[y]['Provider'])
-				x.setState(boxlist[y]['State'])
-				x.setDirectory(boxlist[y]['Directory'])
-				#print vars(x)
-				#indy = Indicator(x)
+				x.box_id	= boxlist[y]['ID']
+				x.name		= boxlist[y]['BoxName']
+				x.provider	= boxlist[y]['Provider']
+				x.state		= boxlist[y]['State']
+				x.directory	= boxlist[y]['Directory']
 
 				y +=1
-
 				pass
-			indys = [Indicator(i) for i in objs]
-			#for x in indys:
-			#	x.live()
-			#	pass
 
-			for  x in boxlist:
-				os.system("python tray.py &")
+			for x in objs:
+				pwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+				command = "python tray.py " + x.name + " " + pwd + " &"
+				print command
+				os.system(command)
 				pass
 
 		else:
@@ -94,48 +83,17 @@ class Vman():
 
 		#readBoxes()
 
-app=Vman()
-#Gtk.main()
+arg1, arg2, arg3 = [ False, False, False ]
+if sys.argv[1:]:   # test if there are atleast 1 argument (beyond [0])
+    arg1 = sys.argv[1]
+    if sys.argv[2:]:
+        arg2 = sys.argv[2]  # careful 'True' is a string, not a boolean
+        #arg3 = sys.argv[3:]
 
-
-#ind = MainMenu()
-#win = Window()
-#
-#win.connect("delete-event", Gtk.main_quit)
-#win.show_all()
-#Gtk.main()
-
-###########################################################################
-#manual tests :P
-###########################################################################
-
-#This is the main script should just call windows and indicators :)
-
-#I will need the following:
-
-#REFERENCE ONLY
-#
-#class Indicator():
-#	def __init__(self):
-#		pass
-#
-#	"""
-#	reads the locations of the boxes,
-#	returns a list with the locations
-#
-#	Will be replaced by vagrant global-status
-#	"""
-#	def readBoxes(self):
-#		#file = open('data/boxes')
-#		print "reading file..."
-#		with open('../data/boxes') as file:
-#			content = file.readlines()
-#
-#		print "processing list of boxes..."
-#		boxesList = []
-#		for path in content:
-#				boxesList.append(path[:-1])
-#		print "boxes list is : "
-#		print boxesList
-#		return boxesList
-#		print file.read()
+if arg1 != False and arg2 != False:
+	targetBox 	= arg1
+	vmanCommand = arg2
+	print targetBox + " - " + vmanCommand + " " + app
+	pass
+else:
+	app=Vman()

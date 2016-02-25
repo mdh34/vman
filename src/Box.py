@@ -14,39 +14,7 @@ class Box():
 
 	# I'm thinking if it really is necessary to create a db with this info
 	# Or if files are everything I need
-
-	## Class Getters:
-	def getId(self):
-		return self.id
-
-	def getName(self):
-		return self.name
-
-	def getProvider(self):
-		return self.provider
-
-	def getState(self):
-		return self.state
-
-	def getDirectory(self):
-		return self.directory
-
-	## Class Getters:
-	def setId(self, boxId):
-		self.id = boxId
-
-	def setName(self, boxName):
-		self.name = boxName
-
-	def setProvider(self, boxProvider):
-		self.provider = boxProvider
-
-	def setState(self, boxState):
-		self.state = boxState
-
-	def setDirectory(self, boxDirectory):
-		self.directory = boxDirectory
-
+	
 	## Functionality
 	def openDirectory(self):
 		dir = self.getDirectory()

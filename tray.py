@@ -1,17 +1,20 @@
 import os
 import signal
+import sys
 from subprocess import call
 from gi.repository import Gtk as gtk
 from gi.repository import AppIndicator3 as appindicator
 
-APPINDICATOR_ID = 'myappindicator'
+targetBox = sys.argv[1]
+vmanLocal = sys.argv[2]
+APPINDICATOR_ID = targetBox
+
 
 def main():
     indicator = appindicator.Indicator.new(APPINDICATOR_ID, os.path.abspath('sample_icon.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
     indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
     indicator.set_menu(build_menu())
-    #set_idicator(APPINDICATOR_ID)
-
+    
     gtk.main()
 
 def set_idicator(APPINDICATOR_ID):
@@ -49,16 +52,19 @@ def build_menu():
     return menu
 
 def open_location(self):
-    call(["pwd"])
-    print "open_location"
+    call(["python", vmanLocal+"/vman.py", targetBox, "open_location", "&"])
+    print vmanLocal + " open_location " + targetBox
 
 def halt(self):
+    call(["python", vmanLocal+"/vman.py", targetBox, "halt", "&"])
     print "halt"
 
 def up_suspend(self):
+    call(["python", vmanLocal+"/vman.py", targetBox, "up_suspend", "&"])
     print "up_suspend"
 
 def ssh(self):
+    call(["python", vmanLocal+"/vman.py", targetBox, "ssh", "&"])
     print "ssh"
 
 def quit(source):

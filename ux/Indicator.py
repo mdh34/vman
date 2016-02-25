@@ -10,8 +10,8 @@ class Indicator():
 	ID = ''
 	def __init__(self, BoxObject):
 		print vars(BoxObject)
-		print BoxObject.getName()
-		self.ID = BoxObject.getName()
+		print BoxObject.name
+		self.ID = BoxObject.name
 		indicator = appindicator.Indicator.new(self.ID, os.path.abspath('sample_icon.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
 		indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
 		indicator.set_menu(self.build_menu())
