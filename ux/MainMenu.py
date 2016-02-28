@@ -8,7 +8,7 @@ from gi.repository import AppIndicator3 as appindicator
 
 ID = 'VmanMenu'
 def main():
-	indicator = appindicator.Indicator.new(ID, os.path.abspath('sample_icon1.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
+	indicator = appindicator.Indicator.new(ID, os.path.abspath('drawing.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
 	indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
 	indicator.set_menu(build_menu())
 	gtk.main()
@@ -43,15 +43,18 @@ def build_menu():
 	return menu
 
 def add_box(self):
+	#window allowing to add boxes with the fields title url image and init folder
 	print "add_box"
 
 def configuration(self):
+	#window allowing to do basic configs
 	print "configuration"
 
 def about(self):
-	print "about"
+	print "about window"
 
 def quit(self):
+	#kill all the other inicators
 	gtk.main_quit()
 
 if __name__ == "__main__":

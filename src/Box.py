@@ -14,25 +14,25 @@ class Box():
 
 	# I'm thinking if it really is necessary to create a db with this info
 	# Or if files are everything I need
-	
+
 	## Functionality
 	def openDirectory(self):
-		dir = self.getDirectory()
+		dir = self.directory
 		print "calling: cd " + dir
 		#get default file manager
 		#call file manafer on dir locations
 		call(["xdg-open", "dir"])
 
 	def halt(self):
-		print "vagrant halt " + self.getId()
-		call(["vagrant", "halt", self.getId()])
+		print "vagrant halt " + self.box_id
+		call(["vagrant", "halt", self.box_id])
 
 	def upOrSuspend(self):
-		dir = self.getDirectory()
+		dir = self.directory
 
 		print "changing directory..."
 		cmd = "cd " + dir + " && "
-		status = self.getState()
+		status = self.state
 
 		if (status == 'running'):
 			print "status on, suspending"
@@ -47,8 +47,8 @@ class Box():
 		#run cmd
 
 	def ssh(self):
-		print "calling: vagrant ssh " + self.getId() + "..."
-		call(["vagrant", "ssh", self.getId()])
+		print "calling: vagrant ssh " + self.box_id + "..."
+		call(["vagrant", "ssh", self.box_id])
 
 #manual tests :P
 #

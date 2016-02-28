@@ -32,8 +32,9 @@ class Vman():
 			#test Data
 			#boxlist = ['asd','qwe']   -->database retriven stuff??
 			boxlist = [
-					{'BoxName':"Box1",'Provider':"VirtualBox",'ID':1,'State':"on",'Directory':"/home/glink/Projects/test1"},
-					{'BoxName':"Box2",'Provider':"VirtualBox",'ID':2,'State':"on",'Directory':"/home/glink/Projects/test2"}
+					{'BoxName':"default",'Provider':"VirtualBox",'ID':'3698b9a','State':'running', 'Directory':'/home/glink/Projects/php'}
+					#{'BoxName':"Box1",,'ID':1,'State':"on",'Directory':"/home/glink/Projects/test1"},
+					#{'BoxName':"Box2",'Provider':"VirtualBox",'ID':2,'State':"on",'Directory':"/home/glink/Projects/test2"}
 				]
 
 			objs = [Box() for i in boxlist]
@@ -93,7 +94,14 @@ if sys.argv[1:]:   # test if there are atleast 1 argument (beyond [0])
 if arg1 != False and arg2 != False:
 	targetBox 	= arg1
 	vmanCommand = arg2
-	print targetBox + " - " + vmanCommand + " " + app
+	vbox = Box()
+	vbox.box_id		= '3698b9a'
+	vbox.name		= "default"
+	vbox.provider	= "VirtualBox"
+	vbox.state		= 'running'
+	vbox.directory	= '/home/glink/Projects/php'
+	print targetBox + " - " + vmanCommand + " " + vbox.box_id
+	vbox.halt()
 	pass
 else:
 	app=Vman()
