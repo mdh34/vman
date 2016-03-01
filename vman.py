@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import os, inspect, signal, sys
 from gi.repository import Gtk, Gio
@@ -9,6 +10,8 @@ from gi.repository import Gtk, Gio
 #from ux.MainMenu import MainMenu
 from src.Box import Box
 from subprocess import call
+import sqlite3 as lite
+import sys
 
 class Vman():
 	"""docstring for Vman"""
@@ -29,8 +32,27 @@ class Vman():
 		if not boxes:
 			print "Needs Configs!"
 
+			#list to insert into the config db
+			boxlist = (
+			    (1, 'Audi', 52642),
+			    (2, 'Mercedes', 57127),
+			    (3, 'Skoda', 9000),
+			    (4, 'Volvo', 29000),
+			    (5, 'Bentley', 350000),
+			    (6, 'Hummer', 41400),
+			    (7, 'Volkswagen', 21600)
+			)
+
+			#DB config
+			con = lite.connect(home + '/.vman/boxes')
+			with con:
+			    cur = con.cursor()
+			    cur.execute("CREATE TABLE vman_config (box_id text, name text, provider text, state int, directory text, project_dir text)")
+				cur.execute("CREATE TABLE Cars(Id INT, Name TEXT, Price INT)")
+				cur.executemany("INSERT INTO Cars VALUES(?, ?, ?)", cars)
+
 			#test Data
-			#boxlist = ['asd','qwe']   -->database retriven stuff??
+			#boxlist = ['asd','qwe'] -->database/vagrant global-status  retriven stuff
 			boxlist = [
 					{'BoxName':"default",'Provider':"VirtualBox",'ID':'3698b9a','State':'running', 'Directory':'/home/glink/Projects/php'}
 					#{'BoxName':"Box1",,'ID':1,'State':"on",'Directory':"/home/glink/Projects/test1"},
