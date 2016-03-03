@@ -10,6 +10,8 @@ from gi.repository import Gtk, Gio
 #from ux.MainMenu import MainMenu
 from src.Box import Box
 from subprocess import call
+from subprocess import Popen
+from subprocess import PIPE
 import sqlite3 as lite
 import sys
 
@@ -33,6 +35,26 @@ class Vman():
 			print "Needs Configs!"
 
 			#list to insert into the config db
+			#test Datade
+			#boxlist = ['asd','qwe'] -->database/vagrant global-status  retriven stuff
+			boxlist = (
+					{'BoxName':"default",'Provider':"VirtualBox",'ID':'3698b9a','State':'running', 'Directory':'/home/glink/Projects/php'},
+					#{'BoxName':"Box1",,'ID':1,'State':"on",'Directory':"/home/glink/Projects/test1"},
+					{'BoxName':"Box2",'Provider':"VirtualBox",'ID':2,'State':"on",'Directory':"/home/glink/Projects/test2"},
+				)
+			print boxlist[0]['BoxName']
+			#call(["vagrant", "global-status", "--prune"])
+			output = Popen(["vagrant", "global-status", "--prune"], stdout=PIPE).communicate()[0]
+			print "-------LOL--------"
+
+			#before spliting and cutting the string I need to clear up the vagrant output
+			#it does not have a fix ammount of  dashes (duh)
+			output = output[146:-350].split('\n')
+			var = []
+			for string in output:
+				var.append(string.rstrip())
+			print var
+			sys.exit("lol")
 			boxlist = (
 			    (1, 'Audi', 52642),
 			    (2, 'Mercedes', 57127),
@@ -46,18 +68,10 @@ class Vman():
 			#DB config
 			con = lite.connect(home + '/.vman/boxes')
 			with con:
-			    cur = con.cursor()
-			    cur.execute("CREATE TABLE vman_config (box_id text, name text, provider text, state int, directory text, project_dir text)")
-				cur.execute("CREATE TABLE Cars(Id INT, Name TEXT, Price INT)")
-				cur.executemany("INSERT INTO Cars VALUES(?, ?, ?)", cars)
-
-			#test Data
-			#boxlist = ['asd','qwe'] -->database/vagrant global-status  retriven stuff
-			boxlist = [
-					{'BoxName':"default",'Provider':"VirtualBox",'ID':'3698b9a','State':'running', 'Directory':'/home/glink/Projects/php'}
-					#{'BoxName':"Box1",,'ID':1,'State':"on",'Directory':"/home/glink/Projects/test1"},
-					#{'BoxName':"Box2",'Provider':"VirtualBox",'ID':2,'State':"on",'Directory':"/home/glink/Projects/test2"}
-				]
+				cur = con.cursor()
+				cur.execute("CREATE TABLE vman_config (box_id text, name text, provider text, state int, directory text, project_dir text)")
+			#cur.execute("CREATE TABLE Cars(Id INT, Name TEXT, Price INT)")
+			cur.executemany("INSERT INTO Cars VALUES(?, ?, ?)", cars)
 
 			objs = [Box() for i in boxlist]
 
