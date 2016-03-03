@@ -8,6 +8,7 @@ class Box():
 	provider 	= ''
 	state    	= ''
 	directory 	= ''
+	location    = ''
 
 	def __init__(self):
 		pass

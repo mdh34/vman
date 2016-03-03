@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os, inspect, signal, sys
+import os, inspect, signal, sys, subprocess
 from gi.repository import Gtk, Gio
-#import os.path
+import os.path
 
 #from ux.Window import Window
 #from ux.Indicator import Indicator
@@ -20,7 +20,7 @@ class Vman():
 	def __init__(self):
 		#super(Vman, self).__init__()
 		#self.arg = arg
-
+		# create main menu Indicator
 		pwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))) + "/ux/"
 		command = "python " + pwd + "MainMenu.py &"
 		print command
@@ -43,47 +43,46 @@ class Vman():
 					{'BoxName':"Box2",'Provider':"VirtualBox",'ID':2,'State':"on",'Directory':"/home/glink/Projects/test2"},
 				)
 			print boxlist[0]['BoxName']
-			#call(["vagrant", "global-status", "--prune"])
-			output = Popen(["vagrant", "global-status", "--prune"], stdout=PIPE).communicate()[0]
-			print "-------LOL--------"
 
-			#before spliting and cutting the string I need to clear up the vagrant output
-			#it does not have a fix ammount of  dashes (duh)
-			output = output[146:-350].split('\n')
-			var = []
-			for string in output:
-				var.append(string.rstrip())
-			print var
-			sys.exit("lol")
-			boxlist = (
-			    (1, 'Audi', 52642),
-			    (2, 'Mercedes', 57127),
-			    (3, 'Skoda', 9000),
-			    (4, 'Volvo', 29000),
-			    (5, 'Bentley', 350000),
-			    (6, 'Hummer', 41400),
-			    (7, 'Volkswagen', 21600)
-			)
+			tmp = os.popen("vagrant global-status --prune | grep '/'").read()
+
+			tmp = tmp.split('\n')
+			boxlist = []
+			for string in tmp:
+				notempty = string.rstrip()
+				if notempty != '':
+					notempty = notempty.split(' ')
+					data=[]
+					for item in notempty:
+						if item != '':
+							data.append(item)
+					data.append('toset')
+					boxlist.append(data)
+			#print boxlist
+			os.system('mkdir ' + home + '/.vman/')
+			#sys.exit(home + '/.vman/boxes')
 
 			#DB config
+			call(["touch",home + '/.vman/boxes'])
 			con = lite.connect(home + '/.vman/boxes')
 			with con:
 				cur = con.cursor()
 				cur.execute("CREATE TABLE vman_config (box_id text, name text, provider text, state int, directory text, project_dir text)")
-			#cur.execute("CREATE TABLE Cars(Id INT, Name TEXT, Price INT)")
-			cur.executemany("INSERT INTO Cars VALUES(?, ?, ?)", cars)
+				cur.executemany("INSERT INTO vman_config VALUES(?, ?, ?, ?, ?, ?)", boxlist)
 
 			objs = [Box() for i in boxlist]
-
+			#print boxlist
+			#sys.exit(home + '/.vman/boxes')
 			y = 0
 			for x in objs:
-
+				# To do: refactor this no need for the object creation at this stage or ever probably
 				print "Creating box object"
-				x.box_id	= boxlist[y]['ID']
-				x.name		= boxlist[y]['BoxName']
-				x.provider	= boxlist[y]['Provider']
-				x.state		= boxlist[y]['State']
-				x.directory	= boxlist[y]['Directory']
+				x.box_id	= boxlist[y][0]
+				x.name		= boxlist[y][1]
+				x.provider	= boxlist[y][2]
+				x.state		= boxlist[y][3]
+				x.directory	= boxlist[y][4]
+				x.location  = boxlist[y][5]
 
 				y +=1
 				pass
