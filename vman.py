@@ -70,6 +70,7 @@ class Vman():
 				cur.execute("CREATE TABLE vman_config (box_id text, name text, provider text, state int, directory text, project_dir text)")
 				cur.executemany("INSERT INTO vman_config VALUES(?, ?, ?, ?, ?, ?)", boxlist)
 
+			## This needs to be inside a funcion
 			objs = [Box() for i in boxlist]
 			#print boxlist
 			#sys.exit(home + '/.vman/boxes')
@@ -93,29 +94,68 @@ class Vman():
 				print command
 				os.system(command)
 				pass
+			##This needs to be inside a funcion
 
 		else:
 			print "Does not need Config"
+			print boxes
+			#sys.exit()
+			con = lite.connect(home + '/.vman/boxes')
 
+			with con:
 
-		"""
-		reads the locations of the boxes,
-		returns a list with the locations
-		Will be replaced by vagrant global-status
-		"""
-		def readBoxes(self):
-			file = open('data/boxes')
-			print "reading config file..."
-			with open('data/boxes') as file:
-				content = file.readlines()
-			print "processing list of boxes..."
-			boxesList = []
-			for path in content:
-					boxesList.append(path[:-1])
-			print "boxes list is : "
-			print boxesList
-			return boxesList
-			print file.read()
+			    cur = con.cursor()
+			    cur.execute("SELECT * FROM vman_config")
+
+			    rows = cur.fetchall()
+
+			    for row in rows:
+			        print row
+
+#			## This needs to be inside a funcion
+#			objs = [Box() for i in rows]
+#			#print boxlist
+#			#sys.exit(home + '/.vman/boxes')
+#			y = 0
+#			for row in rows:
+#				# To do: refactor this no need for the object creation at this stage or ever probably
+#				print "Creating box object"
+#				x.box_id	= rows[y][0]
+#				x.name		= rows[y][1]
+#				x.provider	= rows[y][2]
+#				x.state		= rows[y][3]
+#				x.directory	= rows[y][4]
+#				x.location  = rows[y][5]
+#
+#				y +=1
+#				pass
+#
+#			for x in objs:
+#				pwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+#				command = "python tray.py " + x.name + " " + pwd + " &"
+#				print command
+#				os.system(command)
+#				pass
+			##This needs to be inside a funcion
+			#sys.exit(boxes)
+#		"""
+#		reads the locations of the boxes,
+#		returns a list with the locations
+#		Will be replaced by vagrant global-status
+#		"""
+#		def readBoxes(self):
+#			file = open('data/boxes')
+#			print "reading config file..."
+#			with open('data/boxes') as file:
+#				content = file.readlines()
+#			print "processing list of boxes..."
+#			boxesList = []
+#			for path in content:
+#					boxesList.append(path[:-1])
+#			print "boxes list is : "
+#			print boxesList
+#			return boxesList
+#			print file.read()
 
 		#readBoxes()
 
@@ -136,7 +176,15 @@ if arg1 != False and arg2 != False:
 	vbox.state		= 'running'
 	vbox.directory	= '/home/glink/Projects/php'
 	print targetBox + " - " + vmanCommand + " " + vbox.box_id
-	vbox.halt()
+
+	if vmanCommand == 'open_location':
+		vbox.openDirectory()
+	if vmanCommand == 'halt':
+		vbox.halt()
+	if vmanCommand == 'up_suspend':
+		vbox.upOrSuspend()
+	if vmanCommand == 'ssh':
+		vbox.ssh()
 	pass
 else:
 	app=Vman()

@@ -15,6 +15,11 @@ class Box():
 
 	# I'm thinking if it really is necessary to create a db with this info
 	# Or if files are everything I need
+	def setById(id):
+		#connect to db
+		#get row
+		#set Properties
+		pass
 
 	## Functionality
 	def openDirectory(self):
