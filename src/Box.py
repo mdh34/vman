@@ -1,5 +1,9 @@
 #!/usr/bin/python
 from subprocess import call
+import pprint
+import os
+import sqlite3 as lite
+
 
 class Box():
 
@@ -15,11 +19,49 @@ class Box():
 
 	# I'm thinking if it really is necessary to create a db with this info
 	# Or if files are everything I need
-	def setById(id):
-		#connect to db
-		#get row
+	def setById(self, id):
+		#pprint.pprint(self)
+		home = os.path.expanduser("~")
+		con = lite.connect(home + '/.vman/boxes')
+		with con:
+
+			cur = con.cursor()
+			#"UPDATE Cars SET Price=? WHERE Id=?", (uPrice, uId))
+			cur.execute("SELECT * FROM vman_config WHERE box_id = ?",(id,) )
+
+			rows = cur.fetchone()
+
+			self.box_id 	= rows[0]
+			self.name		= rows[1]
+			self.provider 	= rows[2]
+			self.state    	= rows[3]
+			self.directory 	= rows[4]
+			self.location   = rows[5]
 		#set Properties
 		pass
+
+	def updateDataBase(self):
+
+		home = os.path.expanduser("~")
+		con = lite.connect(home + '/.vman/boxes')
+		with con:
+			cur = con.cursor()
+			cur.execute("UPDATE vman_config SET name=?, provider=?, state=?, directory=?, project_dir=? WHERE box_id = ?",
+						(self.name, self.provider, self.state, self.directory, self.location, self.box_id)
+						)
+			con.commit()
+		pass
+
+	def updateStatus(self, cmd):
+
+		if cmd == "suspend":
+			self.state = 'suspended'
+		elif cmd == 'halt':
+			self.state = 'halt'
+		else:
+			self.state = 'running'
+			pass
+		self.updateDataBase()
 
 	## Functionality
 	def openDirectory(self):
@@ -32,6 +74,7 @@ class Box():
 	def halt(self):
 		print "vagrant halt " + self.box_id
 		call(["vagrant", "halt", self.box_id])
+		self.updateStatus
 
 	def upOrSuspend(self):
 		dir = self.directory
@@ -49,54 +92,10 @@ class Box():
 			cmd = "up"
 
 		print "calling: cd " + dir + " && vagrant " + cmd
-		call(["cd", dir, "&&", "vagrant", cmd])
-		#run cmd
+		os.popen("cd " + dir + " && vagrant " + cmd)
+		self.updateStatus(cmd)
+
 
 	def ssh(self):
 		print "calling: vagrant ssh " + self.box_id + "..."
-		call(["vagrant", "ssh", self.box_id])
-
-#manual tests :P
-#
-#box1 = Box()
-#box1.setId('caixa1')
-#box1.setName('caixa1')
-#box1.setProvider('virtualbox')
-#box1.setState('running')
-#box1.setDirectory('~/projects/caixa1')
-#
-#print box1.getId()
-#print box1.getName()
-#print box1.getProvider()
-#print box1.getState()
-#print box1.getDirectory()
-#
-#print "---------------------------------------"
-#
-#box1.openDirectory()
-#box1.halt()
-#box1.upOrSuspend()
-#box1.ssh()
-#
-#
-#print "---------------------------------------"
-#print "---------------------------------------"
-#
-#box2 = Box()
-#box2.setId('caixa2')
-#box2.setName('caixa2')
-#box2.setProvider('virtualbox')
-#box2.setState('stoped')
-#box2.setDirectory('~/projects/caixa2')
-#
-#print box2.getId()
-#print box2.getName()
-#print box2.getProvider()
-#print box2.getState()
-#print box2.getDirectory()
-#
-#print "---------------------------------------"
-#box2.openDirectory()
-#box2.halt()
-#box2.upOrSuspend()
-#box2.ssh()
+		os.popen("gnome-terminal -e vagrant ssh "+ self.box_id )

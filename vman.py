@@ -34,16 +34,6 @@ class Vman():
 		if not boxes:
 			print "Needs Configs!"
 
-			#list to insert into the config db
-			#test Datade
-			#boxlist = ['asd','qwe'] -->database/vagrant global-status  retriven stuff
-			boxlist = (
-					{'BoxName':"default",'Provider':"VirtualBox",'ID':'3698b9a','State':'running', 'Directory':'/home/glink/Projects/php'},
-					#{'BoxName':"Box1",,'ID':1,'State':"on",'Directory':"/home/glink/Projects/test1"},
-					{'BoxName':"Box2",'Provider':"VirtualBox",'ID':2,'State':"on",'Directory':"/home/glink/Projects/test2"},
-				)
-			print boxlist[0]['BoxName']
-
 			tmp = os.popen("vagrant global-status --prune | grep '/'").read()
 
 			tmp = tmp.split('\n')
@@ -87,19 +77,9 @@ class Vman():
 
 				y +=1
 				pass
-
-			for x in objs:
-				pwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-				command = "python tray.py " + x.name + " " + pwd + " &"
-				print command
-				os.system(command)
-				pass
 			##This needs to be inside a funcion
 
 		else:
-			print "Does not need Config"
-			print boxes
-			#sys.exit()
 			con = lite.connect(home + '/.vman/boxes')
 
 			with con:
@@ -109,55 +89,30 @@ class Vman():
 
 			    rows = cur.fetchall()
 
-			    for row in rows:
-			        print row
+			## This needs to be inside a funcion
+			objs = [Box() for i in rows]
 
-#			## This needs to be inside a funcion
-#			objs = [Box() for i in rows]
-#			#print boxlist
-#			#sys.exit(home + '/.vman/boxes')
-#			y = 0
-#			for row in rows:
-#				# To do: refactor this no need for the object creation at this stage or ever probably
-#				print "Creating box object"
-#				x.box_id	= rows[y][0]
-#				x.name		= rows[y][1]
-#				x.provider	= rows[y][2]
-#				x.state		= rows[y][3]
-#				x.directory	= rows[y][4]
-#				x.location  = rows[y][5]
-#
-#				y +=1
-#				pass
-#
-#			for x in objs:
-#				pwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-#				command = "python tray.py " + x.name + " " + pwd + " &"
-#				print command
-#				os.system(command)
-#				pass
-			##This needs to be inside a funcion
-			#sys.exit(boxes)
-#		"""
-#		reads the locations of the boxes,
-#		returns a list with the locations
-#		Will be replaced by vagrant global-status
-#		"""
-#		def readBoxes(self):
-#			file = open('data/boxes')
-#			print "reading config file..."
-#			with open('data/boxes') as file:
-#				content = file.readlines()
-#			print "processing list of boxes..."
-#			boxesList = []
-#			for path in content:
-#					boxesList.append(path[:-1])
-#			print "boxes list is : "
-#			print boxesList
-#			return boxesList
-#			print file.read()
+			y = 0
+			#for row in rows:
+			for x in objs:
+				# To do: refactor this no need for the object creation at this stage or ever probably
+				print "Creating box object"
+				x.box_id	= rows[y][0]
+				x.name		= rows[y][1]
+				x.provider	= rows[y][2]
+				x.state		= rows[y][3]
+				x.directory	= rows[y][4]
+				x.location  = rows[y][5]
 
-		#readBoxes()
+				y +=1
+				pass
+
+		for x in objs:
+			pwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+			command = "python tray.py " + x.box_id + " " + pwd + " &"
+			print command
+			os.system(command)
+			pass
 
 arg1, arg2, arg3 = [ False, False, False ]
 if sys.argv[1:]:   # test if there are atleast 1 argument (beyond [0])
@@ -169,12 +124,10 @@ if sys.argv[1:]:   # test if there are atleast 1 argument (beyond [0])
 if arg1 != False and arg2 != False:
 	targetBox 	= arg1
 	vmanCommand = arg2
+	print targetBox + " - " + vmanCommand + " <<<<<"
 	vbox = Box()
-	vbox.box_id		= '3698b9a'
-	vbox.name		= "default"
-	vbox.provider	= "VirtualBox"
-	vbox.state		= 'running'
-	vbox.directory	= '/home/glink/Projects/php'
+	vbox.setById(targetBox)
+
 	print targetBox + " - " + vmanCommand + " " + vbox.box_id
 
 	if vmanCommand == 'open_location':
