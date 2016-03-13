@@ -69,15 +69,16 @@ class Box():
 		print "calling: cd " + dir
 		#get default file manager
 		#call file manafer on dir locations
-		call(["xdg-open", "dir"])
+		os.popen("xdg-open " +dir)
 
 	def halt(self):
 		print "vagrant halt " + self.box_id
 		call(["vagrant", "halt", self.box_id])
-		self.updateStatus
+		self.updateStatus('halt')
 
 	def upOrSuspend(self):
 		dir = self.directory
+		#need to check the status of the machine on vagrant, in vman
 
 		print "changing directory..."
 		cmd = "cd " + dir + " && "
@@ -94,8 +95,9 @@ class Box():
 		print "calling: cd " + dir + " && vagrant " + cmd
 		os.popen("cd " + dir + " && vagrant " + cmd)
 		self.updateStatus(cmd)
+		#change icon in order to have some feedback
 
 
 	def ssh(self):
 		print "calling: vagrant ssh " + self.box_id + "..."
-		os.popen("gnome-terminal -e vagrant ssh "+ self.box_id )
+		os.popen("/usr/bin/x-terminal-emulator -e vagrant ssh "+ self.box_id + " &" )
