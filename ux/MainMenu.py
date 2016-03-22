@@ -3,8 +3,12 @@
 #import important stuff
 import os
 import signal
+import sys
 from gi.repository import Gtk as gtk
 from gi.repository import AppIndicator3 as appindicator
+from subprocess import call
+
+vmanLocal = sys.argv[1]
 
 ID = 'VmanMenu'
 def main():
@@ -44,6 +48,7 @@ def build_menu():
 
 def add_box(self):
 	#window allowing to add boxes with the fields title url image and init folder
+	call(["python", vmanLocal + "Window.py", "&"])
 	print "add_box"
 
 def configuration(self):

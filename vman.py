@@ -22,7 +22,7 @@ class Vman():
 		#self.arg = arg
 		# create main menu Indicator
 		pwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))) + "/ux/"
-		command = "python " + pwd + "MainMenu.py &"
+		command = "python " + pwd + "MainMenu.py " + pwd + " &"
 		print command
 		os.system(command)
 
