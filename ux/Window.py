@@ -8,20 +8,24 @@ from subprocess import call
 class StackWindow(Gtk.Window):
 
     def __init__(self):
-        Gtk.Window.__init__(self, title="Stack Demo")
+        #set title
+        Gtk.Window.__init__(self, title="Vman - Add Box")
         self.set_border_width(10)
 
         vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.add(vbox)
 
+        #add a label
         label = Gtk.Label()
         label.set_markup('<big>Add a Vagrant Box</big>')
         vbox.add(label)
 
+        #add a stack
         stack = Gtk.Stack()
         stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
-        stack.set_transition_duration(1000)
+        stack.set_transition_duration(100)
 
+        #adds the folder selector dialog
         row = Gtk.ListBoxRow()
         hbox = Gtk.Box(orientation = Gtk.Orientation.HORIZONTAL, spacing = 50)
         add_button = Gtk.Button(label="Select project Location")
@@ -29,23 +33,41 @@ class StackWindow(Gtk.Window):
         hbox.add(add_button)
         row.add(hbox)
         #listbox.add(row)
-
         stack.add_titled(row, "add", "Location")
 
-        StackBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        #adds the check list and the field in the bottom
+        ChecklistBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        button1 = Gtk.RadioButton.new_with_label_from_widget(None, "ubuntu/trusty64")
+        button1.connect("toggled", self.on_button_toggled, "1")
+        ChecklistBox.pack_start(button1, False, False, 0)
 
-        checkbutton = Gtk.CheckButton("ubuntu/trusty64")
-        StackBox.add(checkbutton)
-        checkbutton = Gtk.CheckButton("ubuntu/trusty32")
-        StackBox.add(checkbutton)
-        checkbutton = Gtk.CheckButton("laravel/homestead")
-        StackBox.add(checkbutton)
+        button2 = Gtk.RadioButton.new_from_widget(button1)
+        button2.set_label("ubuntu/trusty32")
+        button2.connect("toggled", self.on_button_toggled, "2")
+        ChecklistBox.pack_start(button2, False, False, 0)
+
+        button3 = Gtk.RadioButton.new_with_mnemonic_from_widget(button1,
+            "laravel/homestead")
+        button3.connect("toggled", self.on_button_toggled, "3")
+        ChecklistBox.pack_start(button3, False, False, 0)
+
+        button4 = Gtk.RadioButton.new_from_widget(button1)
+        button4.set_label('Select from Hashicorp')
+        button4.connect("toggled", self.on_button_toggled, "4")
+        ChecklistBox.pack_start(button4, False, False, 0)
+
+        label = Gtk.Label()
+        #label.set_markup('<small><a href="http://www.gtk.org" "title="Click to find out more">internets</a></small>')
+        label.set_markup("<small>Select a box from <a href=\"https://atlas.hashicorp.com/boxes/search?provider=virtualbox\" "
+                         "title=\"Click to find out more\">Hashicorp</a></small>")
+        ChecklistBox.add(label)
 
         checkbutton = Gtk.Entry()
-        checkbutton.set_text("type box name from https://atlas.hashicorp.com/boxes/search?provider=virtualbox")
+        checkbutton.set_text("Box/Name")
         #vbox.pack_start(self.entry, True, True, 0)
-        StackBox.add(checkbutton)
-        stack.add_titled(StackBox, "check", "Select a Box")
+        ChecklistBox.add(checkbutton)
+        stack.add_titled(ChecklistBox, "check", "Select a Box")
+
 
         label = Gtk.Label()
         label.set_markup("<big>Select a Picture</big>")
@@ -64,10 +86,17 @@ class StackWindow(Gtk.Window):
         canselButton = Gtk.Button(label="Init")
         vbox.pack_end(canselButton, True, True, 0)
 
+############################
+    def on_button_toggled(self, button, name):
+        if button.get_active():
+            state = "on"
+        else:
+            state = "off"
+        print("Button", name, "was turned", state)
 
     def on_canselButton_clicked(self, widget):
         quit()
-
+############################
     def on_addButton_clicked(self, widget):
         dialog = Gtk.FileChooserDialog("Please choose a file", self,
             Gtk.FileChooserAction.SELECT_FOLDER,
