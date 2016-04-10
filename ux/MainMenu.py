@@ -8,6 +8,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio
 #from gi.repository import Gtk #as Gtk
+gi.require_version('AppIndicator3', '0.1')
 from gi.repository import AppIndicator3 as appindicator
 from subprocess import call
 
@@ -17,7 +18,7 @@ vmanLocal = sys.argv[1]
 
 ID = 'VmanMenu'
 def main():
-	indicator = appindicator.Indicator.new(ID, os.path.abspath('drawing.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
+	indicator = appindicator.Indicator.new(ID, os.path.abspath('data/images/vagrant.svg'), appindicator.IndicatorCategory.SYSTEM_SERVICES)
 	indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
 	indicator.set_menu(build_menu())
 	Gtk.main()
