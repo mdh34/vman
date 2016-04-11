@@ -4,6 +4,8 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio
 from subprocess import call
+from PIL import Image
+import glob, os, inspect
 
 class StackWindow(Gtk.Window):
 
@@ -70,9 +72,25 @@ class StackWindow(Gtk.Window):
 
 
         label = Gtk.Label()
+        #read images from folder
+        image_list = []
+        pwd = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+        print pwd[:-2]+"data/images"
+        os.chdir(pwd[:-2]+"data/images")
+        print glob.glob('*.svg')
+        for filename in glob.glob('*.svg'):
+            #reference
+            #  http://stackoverflow.com/questions/3029574/custom-pygtk-button
+            image = Gtk.Image()
+            imgContainer = gtk.EventBox()
+            image.set_from_file(pwd[:-2]+"data/images/"+filename)
+            imgContainer.add(image)
+            #button.set_image(image)
+            #button.set_label("")
+            pass
         label.set_markup("<big>Select a Picture</big>")
         stack.add_titled(label, "label", "Picture")
-
+        ############
 
         stack_switcher = Gtk.StackSwitcher()
         stack_switcher.set_stack(stack)

@@ -1,3 +1,5 @@
 sqlite3
 gir1.2-appindicator3-0.1
 gir1.2-gtk-3.0
+sudo apt-get install python-pip
+sudo apt-get install python-imaging
